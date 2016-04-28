@@ -64,7 +64,7 @@ BuiltinDecl jsonnet_builtin_decl(unsigned long builtin)
 }
 
 static constexpr char STD_CODE[] = {
-    #include "std.jsonnet.h"
+    #include "stdlib/std.jsonnet.h"
 };
 
 /** Desugar Jsonnet expressions to reduce the number of constructs the rest of the implementation

@@ -29,8 +29,8 @@ OD ?= od
 
 OPT ?= -O3
 
-CXXFLAGS ?= -g $(OPT) -Wall -Wextra -Woverloaded-virtual -pedantic -std=c++0x -fPIC -Iinclude
-CFLAGS ?= -g $(OPT) -Wall -Wextra -pedantic -std=c99 -fPIC -Iinclude
+CXXFLAGS ?= -g $(OPT) -Wall -Wextra -Woverloaded-virtual -pedantic -std=c++0x -fPIC -Iinclude -I.
+CFLAGS ?= -g $(OPT) -Wall -Wextra -pedantic -std=c99 -fPIC -Iinclude -I.
 EMCXXFLAGS = $(CXXFLAGS) --memory-init-file 0 -s DISABLE_EXCEPTION_CATCHING=0
 EMCFLAGS = $(CFLAGS) --memory-init-file 0 -s DISABLE_EXCEPTION_CATCHING=0
 LDFLAGS ?=
@@ -79,7 +79,7 @@ ALL_HEADERS = \
 	core/static_error.h \
 	core/string_utils.h \
 	core/vm.h \
-	core/std.jsonnet.h \
+	stdlib/std.jsonnet.h \
 	include/libjsonnet.h \
 	include/libjsonnet++.h
 
@@ -105,7 +105,7 @@ MAKEDEPEND_SRCS = \
 depend:
 	makedepend -f- $(LIB_SRC) $(MAKEDEPEND_SRCS) > Makefile.depend
 
-core/desugarer.cpp: core/std.jsonnet.h
+core/desugarer.cpp: stdlib/std.jsonnet.h
 
 # Object files
 %.o: %.cpp
@@ -150,7 +150,7 @@ libjsonnet_test_file: $(LIBJSONNET_TEST_FILE_SRCS)
 	$(CC) $(CFLAGS) $(LDFLAGS) $< -L. -ljsonnet -o $@
 
 # Encode standard library for embedding in C
-core/%.jsonnet.h: stdlib/%.jsonnet
+stdlib/%.jsonnet.h: stdlib/%.jsonnet
 	(($(OD) -v -Anone -t u1 $< \
 		| tr " " "\n" \
 		| grep -v "^$$" \
